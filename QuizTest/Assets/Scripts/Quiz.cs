@@ -13,6 +13,9 @@ namespace praveen.one
         [SerializeField] Transform m_ButtonParent;
         [SerializeField] GameObject m_ChoiseButton;
         [SerializeField] Text m_QuestionInfo;
+        [SerializeField] GameObject m_CorrectIcon;
+        [SerializeField] GameObject m_WrongIcon;
+        [SerializeField] Text m_LoadingCountdown;
 
 
         quiz m_SelectedQuiz;
@@ -29,51 +32,67 @@ namespace praveen.one
         {
             m_QuestionInfo.text = "Question "+ (m_QuestionIndex+1) +" of " + m_SelectedQuiz.questions.Length;
 
-            StartCoroutine(SetAlbumCover(question.song.picture));
-            StartCoroutine(GetAudioClip(question.song.sample));
-            PopulateChoices(question.choices);
+            HideUIResult();
+            SetLoadingText("");
+
+            StartCoroutine((new[] {
+                StartCoroutine(SetAlbumCover(question.song.picture)),
+                StartCoroutine(GetAudioClip(question.song.sample)),
+                StartCoroutine(PopulateChoices(question.choices))
+            }).GetEnumerator());
+
         }
 
-        void PopulateChoices(choices[] choices)
+        IEnumerator PopulateChoices(choices[] choices)
         {
-            //m_ScrollRect.
             foreach (Transform child in m_ButtonParent)
             {
                 Destroy(child.gameObject);
             }
+            
             for (int i = 0; i < choices.Length; i++)
             {
                 GameObject go = Instantiate(m_ChoiseButton, m_ButtonParent);
                 int j = i;
                 go.GetComponent<ActionButton>().Init(
                     choices[i].artist + " / " + choices[i].title
-                    , () => { OnAnswerQuestion(j); });
+                    , () => { StartCoroutine(OnAnswerQuestion(j)); });
             }
+
+            yield return null;
         }
 
-        void OnAnswerQuestion(int answer)
+        IEnumerator OnAnswerQuestion(int answer)
         {
             m_AudioSource.Stop();
             questions question = m_SelectedQuiz.questions[m_QuestionIndex];
             if (answer == question.answerIndex)
             {
-                Debug.Log("Answer Is correnct");
+                ShowUIResult(true);
             }
             else
             {
-                Debug.Log("Wrong");
+                ShowUIResult(false);
             }
 
             m_QuestionIndex += 1;
 
             if (m_SelectedQuiz.questions.Length > m_QuestionIndex)
             {
+                int counter = 3;
+                while (counter > 0)
+                {
+                    SetLoadingText("Load Next In " + counter);
+                    yield return new WaitForSeconds(1);
+                    counter--;
+                }
+
                 ShowQuestions(m_SelectedQuiz.questions[m_QuestionIndex]);
             }
         }
 
 
-            IEnumerator SetAlbumCover(string MediaUrl)
+        IEnumerator SetAlbumCover(string MediaUrl)
         {
             UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
             yield return request.SendWebRequest();
@@ -102,6 +121,24 @@ namespace praveen.one
 
             m_AudioSource.clip = myClip;
             m_AudioSource.PlayOneShot(myClip);
+            
+        }
+
+        void ShowUIResult(bool isCrorrect)
+        {
+            m_CorrectIcon.SetActive(isCrorrect);
+            m_WrongIcon.SetActive(!isCrorrect);
+        }
+
+        void HideUIResult()
+        {
+            m_CorrectIcon.SetActive(false);
+            m_WrongIcon.SetActive(false);
+        }
+
+        void SetLoadingText(string text)
+        {
+            m_LoadingCountdown.text = text;
         }
     }
 }
