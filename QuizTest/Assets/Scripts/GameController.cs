@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 namespace praveen.one
 {
+    public enum GameScenes
+    {
+        main,
+        quiz,
+    }
 
     public class GameController : MonoBehaviour
     {
@@ -50,7 +55,7 @@ namespace praveen.one
         public void OnSlectQuiz(string quizId)
         {
             m_SelectedQuiz = GetQuiz(quizId);
-            SceneManager.LoadScene("Quiz");
+            SceneManager.LoadScene(GameScenes.quiz.ToString());
         }
 
         public quiz GetSelectedQuiz()

@@ -13,7 +13,6 @@ namespace praveen.one
 
         void PopulateQuizList()
         {
-            //m_QuizArray = JsonMapper.ToObject<quiz[]>(m_MetaDataJson.ToString());
             quiz[] quizArray = GameController.Instance.GetQuizzes();
 
             for (int i = 0; i < quizArray.Length; i++)
@@ -27,7 +26,7 @@ namespace praveen.one
 
         void OnSelectQuiz(string quizId)
         {
-            Debug.Log(quizId);
+            GameController.Instance.OnSlectQuiz(quizId);
         }
     }
 }

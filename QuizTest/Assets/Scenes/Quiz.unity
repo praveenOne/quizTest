@@ -393,6 +393,7 @@ MonoBehaviour:
   m_AlbumArt: {fileID: 69403607}
   m_ButtonParent: {fileID: 1468019967}
   m_ChoiseButton: {fileID: 6698969846066840399, guid: 8084bcd2cab2c417f8a96c935fcea96f, type: 3}
+  m_QuestionInfo: {fileID: 1568551192}
 --- !u!4 &159839406
 Transform:
   m_ObjectHideFlags: 0

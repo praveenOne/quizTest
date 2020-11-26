@@ -12,6 +12,7 @@ namespace praveen.one
         [SerializeField] RawImage m_AlbumArt;
         [SerializeField] Transform m_ButtonParent;
         [SerializeField] GameObject m_ChoiseButton;
+        [SerializeField] Text m_QuestionInfo;
 
 
         quiz m_SelectedQuiz;
@@ -26,7 +27,8 @@ namespace praveen.one
 
         void ShowQuestions(questions question)
         {
-            //m_QuestionIndex+=1;
+            m_QuestionInfo.text = "Question "+ (m_QuestionIndex+1) +" of " + m_SelectedQuiz.questions.Length;
+
             StartCoroutine(SetAlbumCover(question.song.picture));
             StartCoroutine(GetAudioClip(question.song.sample));
             PopulateChoices(question.choices);
@@ -61,6 +63,8 @@ namespace praveen.one
             {
                 Debug.Log("Wrong");
             }
+
+            m_QuestionIndex += 1;
 
             if (m_SelectedQuiz.questions.Length > m_QuestionIndex)
             {
