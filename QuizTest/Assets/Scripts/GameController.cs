@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using LitJson;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace praveen.one
 {
@@ -19,6 +19,7 @@ namespace praveen.one
 
         [SerializeField] string m_MetaDataJson;
         quiz[] m_QuizArray;
+        quiz m_SelectedQuiz;
 
         private void Awake()
         {
@@ -44,6 +45,22 @@ namespace praveen.one
         public quiz[] GetQuizzes()
         {
             return m_QuizArray;
+        }
+
+        public void OnSlectQuiz(string quizId)
+        {
+            m_SelectedQuiz = GetQuiz(quizId);
+            SceneManager.LoadScene("Quiz");
+        }
+
+        public quiz GetSelectedQuiz()
+        {
+            return m_SelectedQuiz;
+        }
+
+        private quiz GetQuiz(string id)
+        {
+            return m_QuizArray.Where(x => x.id == id).Single();
         }
     }
 }
