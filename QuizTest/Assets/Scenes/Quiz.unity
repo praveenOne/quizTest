@@ -390,13 +390,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AudioSource: {fileID: 778393168}
-  m_AlbumArt: {fileID: 69403607}
   m_ButtonParent: {fileID: 1468019967}
   m_ChoiseButton: {fileID: 6698969846066840399, guid: 8084bcd2cab2c417f8a96c935fcea96f, type: 3}
-  m_QuestionInfo: {fileID: 1568551192}
-  m_CorrectIcon: {fileID: 1067965116}
-  m_WrongIcon: {fileID: 1890911547}
-  m_LoadingCountdown: {fileID: 202357577}
 --- !u!4 &159839406
 Transform:
   m_ObjectHideFlags: 0
@@ -409,7 +404,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &167549260
 GameObject:
@@ -730,7 +725,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &803438716
 GameObject:
@@ -826,7 +821,7 @@ RectTransform:
   - {fileID: 632851843}
   - {fileID: 1970805336}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1288,7 +1283,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1468019966
 GameObject:
@@ -1444,6 +1439,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568551190}
   m_CullTransparentMesh: 0
+--- !u!1 &1617177490
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1617177492}
+  - component: {fileID: 1617177491}
+  m_Layer: 0
+  m_Name: HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1617177491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617177490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e18d27aa8522469789f5e7c7cef7e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlbumArt: {fileID: 69403607}
+  m_QuestionInfo: {fileID: 1568551192}
+  m_CorrectIcon: {fileID: 1067965116}
+  m_WrongIcon: {fileID: 1890911547}
+  m_LoadingCountdown: {fileID: 202357577}
+--- !u!4 &1617177492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617177490}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 812.09937, y: 96.19838, z: 138.80144}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1890911547
 GameObject:
   m_ObjectHideFlags: 0

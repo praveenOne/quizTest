@@ -28,3 +28,15 @@ public struct quiz
     public string playlist;
 }
 
+public struct userChoice
+{
+    public int questionIndex;
+    public int userFeedback;
+
+    public userChoice(int index, int feedback)
+    {
+        this.questionIndex = index;
+        this.userFeedback = feedback;
+    }
+}
+

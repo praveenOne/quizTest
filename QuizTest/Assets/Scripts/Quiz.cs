@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace praveen.one
 {
@@ -9,17 +9,15 @@ namespace praveen.one
     public class Quiz : MonoBehaviour
     {
         [SerializeField] AudioSource m_AudioSource;
-        [SerializeField] RawImage m_AlbumArt;
         [SerializeField] Transform m_ButtonParent;
         [SerializeField] GameObject m_ChoiseButton;
-        [SerializeField] Text m_QuestionInfo;
-        [SerializeField] GameObject m_CorrectIcon;
-        [SerializeField] GameObject m_WrongIcon;
-        [SerializeField] Text m_LoadingCountdown;
 
-
+        bool m_IsAnswered;
         quiz m_SelectedQuiz;
         int m_QuestionIndex;
+        Texture m_AlbumTexture;
+
+        AudioClip m_AudioClip;
 
         void Awake()
         {
@@ -30,15 +28,15 @@ namespace praveen.one
 
         void ShowQuestions(questions question)
         {
-            m_QuestionInfo.text = "Question "+ (m_QuestionIndex+1) +" of " + m_SelectedQuiz.questions.Length;
+            HUD.Instance.SetQuestionInfo("Question " + (m_QuestionIndex + 1) + " of " + m_SelectedQuiz.questions.Length);
 
-            HideUIResult();
-            SetLoadingText("");
+            HUD.Instance.HideUIResult();
+            HUD.Instance.SetLoadingText("");
 
             StartCoroutine((new[] {
-                StartCoroutine(SetAlbumCover(question.song.picture)),
-                StartCoroutine(GetAudioClip(question.song.sample)),
-                StartCoroutine(PopulateChoices(question.choices))
+                SetAlbumCover(question.song.picture),
+                GetAudioClip(question.song.sample),
+                PopulateChoices(question.choices)
             }).GetEnumerator());
 
         }
@@ -56,39 +54,59 @@ namespace praveen.one
                 int j = i;
                 go.GetComponent<ActionButton>().Init(
                     choices[i].artist + " / " + choices[i].title
-                    , () => { StartCoroutine(OnAnswerQuestion(j)); });
+                    , () => { OnQuestionAnswered(j); });
             }
 
             yield return null;
+            HUD.Instance.SetAlbumArt(m_AlbumTexture);
+            m_IsAnswered = false;
+
+            m_AudioSource.clip = m_AudioClip;
+            m_AudioSource.PlayOneShot(m_AudioClip);
         }
 
-        IEnumerator OnAnswerQuestion(int answer)
+        void OnQuestionAnswered(int answer)
         {
+            if (m_IsAnswered)
+                return;
+
+            m_IsAnswered = true;
+
             m_AudioSource.Stop();
             questions question = m_SelectedQuiz.questions[m_QuestionIndex];
+            GameController.Instance.AddUserChoice(new userChoice(m_QuestionIndex, answer));
             if (answer == question.answerIndex)
             {
-                ShowUIResult(true);
+                HUD.Instance.ShowUIResult(true);
             }
             else
             {
-                ShowUIResult(false);
+                HUD.Instance.ShowUIResult(false);
             }
 
             m_QuestionIndex += 1;
 
             if (m_SelectedQuiz.questions.Length > m_QuestionIndex)
             {
-                int counter = 3;
-                while (counter > 0)
-                {
-                    SetLoadingText("Load Next In " + counter);
-                    yield return new WaitForSeconds(1);
-                    counter--;
-                }
-
-                ShowQuestions(m_SelectedQuiz.questions[m_QuestionIndex]);
+                StartCoroutine(LoadNextQuestion());
             }
+            else
+            {
+                SceneManager.LoadScene(GameScenes.result.ToString());
+            }
+        }
+
+        IEnumerator LoadNextQuestion()
+        {
+            int counter = 3;
+            while (counter > 0)
+            {
+                HUD.Instance.SetLoadingText("Load Next In " + counter);
+                yield return new WaitForSeconds(1);
+                counter--;
+            }
+
+            ShowQuestions(m_SelectedQuiz.questions[m_QuestionIndex]);
         }
 
 
@@ -97,48 +115,32 @@ namespace praveen.one
             UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
             yield return request.SendWebRequest();
             if (request.isNetworkError || request.isHttpError)
-                Debug.Log(request.error);
+                Debug.LogError(request.error);
             else
-                m_AlbumArt.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+                m_AlbumTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
 
         IEnumerator GetAudioClip(string mediaUrl)
         {
-            AudioClip myClip = null;
-            using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(mediaUrl, AudioType.WAV))
+            using (UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(mediaUrl, AudioType.WAV))
             {
-                yield return www.SendWebRequest();
-
-                if (www.result == UnityWebRequest.Result.ConnectionError)
+                request.SendWebRequest();
+                while (!request.isDone)
                 {
-                    Debug.Log(www.error);
+                    yield return null;
+                }
+
+                if (request.result == UnityWebRequest.Result.ConnectionError)
+                {
+                    Debug.Log(request.error);
                 }
                 else
                 {
-                    myClip = DownloadHandlerAudioClip.GetContent(www);
+                    m_AudioClip = DownloadHandlerAudioClip.GetContent(request);
                 }
             }
-
-            m_AudioSource.clip = myClip;
-            m_AudioSource.PlayOneShot(myClip);
-            
+            yield break;
         }
-
-        void ShowUIResult(bool isCrorrect)
-        {
-            m_CorrectIcon.SetActive(isCrorrect);
-            m_WrongIcon.SetActive(!isCrorrect);
-        }
-
-        void HideUIResult()
-        {
-            m_CorrectIcon.SetActive(false);
-            m_WrongIcon.SetActive(false);
-        }
-
-        void SetLoadingText(string text)
-        {
-            m_LoadingCountdown.text = text;
-        }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LitJson;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,7 @@ namespace praveen.one
     {
         main,
         quiz,
+        result,
     }
 
     public class GameController : MonoBehaviour
@@ -25,6 +27,7 @@ namespace praveen.one
         [SerializeField] string m_MetaDataJson;
         quiz[] m_QuizArray;
         quiz m_SelectedQuiz;
+        List<userChoice> m_UserChoice = new List<userChoice>();
 
         private void Awake()
         {
@@ -54,6 +57,7 @@ namespace praveen.one
 
         public void OnSlectQuiz(string quizId)
         {
+            m_UserChoice.Clear();
             m_SelectedQuiz = GetQuiz(quizId);
             SceneManager.LoadScene(GameScenes.quiz.ToString());
         }
@@ -66,6 +70,21 @@ namespace praveen.one
         private quiz GetQuiz(string id)
         {
             return m_QuizArray.Where(x => x.id == id).Single();
+        }
+
+        public questions GetQuestionInCurrentQuiz(int questionIndex)
+        {
+            return m_SelectedQuiz.questions[questionIndex];
+        }
+
+        public void AddUserChoice(userChoice userChoice)
+        {
+            m_UserChoice.Add(userChoice);
+        }
+
+        public List<userChoice> GetResults()
+        {
+            return m_UserChoice;
         }
     }
 }
