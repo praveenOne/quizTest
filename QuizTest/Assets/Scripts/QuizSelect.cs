@@ -11,6 +11,9 @@ namespace praveen.one
             PopulateQuizList();
         }
 
+        /// <summary>
+        /// Display Quiz List
+        /// </summary>
         void PopulateQuizList()
         {
             quiz[] quizArray = GameController.Instance.GetQuizzes();
@@ -24,6 +27,10 @@ namespace praveen.one
             }
         }
 
+        /// <summary>
+        /// On User select a quiz
+        /// </summary>
+        /// <param name="quizId"></param>
         void OnSelectQuiz(string quizId)
         {
             GameController.Instance.OnSlectQuiz(quizId);

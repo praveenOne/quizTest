@@ -14,6 +14,9 @@ namespace praveen.one
             DisplayResults();
         }
 
+        /// <summary>
+        /// Display Final Results
+        /// </summary>
         void DisplayResults()
         {
             m_FinalResults = GameController.Instance.GetResults();
@@ -47,6 +50,9 @@ namespace praveen.one
 
         }
 
+        /// <summary>
+        /// Go back to main menu
+        /// </summary>
         public void OnClieckMainMenuBtn()
         {
             SceneManager.LoadScene(GameScenes.main.ToString());

@@ -16,7 +16,6 @@ namespace praveen.one
         quiz m_SelectedQuiz;
         int m_QuestionIndex;
         Texture m_AlbumTexture;
-
         AudioClip m_AudioClip;
 
         void Awake()
@@ -26,6 +25,10 @@ namespace praveen.one
             ShowQuestions(m_SelectedQuiz.questions[m_QuestionIndex]);
         }
 
+        /// <summary>
+        /// Display Questions
+        /// </summary>
+        /// <param name="question"></param>
         void ShowQuestions(questions question)
         {
             HUD.Instance.SetQuestionInfo("Question " + (m_QuestionIndex + 1) + " of " + m_SelectedQuiz.questions.Length);
@@ -41,6 +44,11 @@ namespace praveen.one
 
         }
 
+        /// <summary>
+        /// Generate Choices
+        /// </summary>
+        /// <param name="choices"></param>
+        /// <returns></returns>
         IEnumerator PopulateChoices(choices[] choices)
         {
             foreach (Transform child in m_ButtonParent)
@@ -65,6 +73,10 @@ namespace praveen.one
             m_AudioSource.PlayOneShot(m_AudioClip);
         }
 
+        /// <summary>
+        /// On User Answer a Question
+        /// </summary>
+        /// <param name="answer"></param>
         void OnQuestionAnswered(int answer)
         {
             if (m_IsAnswered)
@@ -96,6 +108,10 @@ namespace praveen.one
             }
         }
 
+        /// <summary>
+        /// Load Next Question
+        /// </summary>
+        /// <returns></returns>
         IEnumerator LoadNextQuestion()
         {
             int counter = 3;
@@ -109,7 +125,11 @@ namespace praveen.one
             ShowQuestions(m_SelectedQuiz.questions[m_QuestionIndex]);
         }
 
-
+        /// <summary>
+        /// Download album art data
+        /// </summary>
+        /// <param name="MediaUrl"></param>
+        /// <returns></returns>
         IEnumerator SetAlbumCover(string MediaUrl)
         {
             UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
@@ -120,6 +140,11 @@ namespace praveen.one
                 m_AlbumTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
 
+        /// <summary>
+        /// Get Audio clip from cloud
+        /// </summary>
+        /// <param name="mediaUrl"></param>
+        /// <returns></returns>
         IEnumerator GetAudioClip(string mediaUrl)
         {
             using (UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip(mediaUrl, AudioType.WAV))

@@ -28,28 +28,47 @@ namespace praveen.one
 
         }
 
+        /// <summary>
+        /// Display results 
+        /// </summary>
+        /// <param name="isCrorrect"></param>
         public void ShowUIResult(bool isCrorrect)
         {
             m_CorrectIcon.SetActive(isCrorrect);
             m_WrongIcon.SetActive(!isCrorrect);
         }
 
+        /// <summary>
+        /// Hide results
+        /// </summary>
         public void HideUIResult()
         {
             m_CorrectIcon.SetActive(false);
             m_WrongIcon.SetActive(false);
         }
 
+        /// <summary>
+        /// Display loading info
+        /// </summary>
+        /// <param name="text"></param>
         public void SetLoadingText(string text)
         {
             m_LoadingCountdown.text = text;
         }
 
+        /// <summary>
+        /// Display question info
+        /// </summary>
+        /// <param name="text"></param>
         public void SetQuestionInfo(string text)
         {
             m_QuestionInfo.text = text;
         }
 
+        /// <summary>
+        /// Set Album art
+        /// </summary>
+        /// <param name="texture"></param>
         public void SetAlbumArt(Texture texture)
         {
             m_AlbumArt.texture = texture;

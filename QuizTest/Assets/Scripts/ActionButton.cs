@@ -7,6 +7,11 @@ namespace praveen.one
     {
         [SerializeField] Text m_ButtonText;
 
+        /// <summary>
+        /// Initialize action button
+        /// </summary>
+        /// <param name="btnText"></param>
+        /// <param name="callback"></param>
         public void Init(string btnText, System.Action callback)
         {
             m_ButtonText.text = btnText;
